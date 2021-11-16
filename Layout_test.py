@@ -13,13 +13,16 @@ urllib.request.install_opener(opener)
 root = Tk()
 root.geometry('910x400')
 b1 = Button(root, text="Video link(entry)", width=40)
-b1.grid(row=0, column=0, padx=10, pady=10)
+b1.grid(row=0, column=0, padx=0, pady=0)
+
+b11 = Button(root, text="Submit", width=10)
+b11.grid(row=0, column=1, padx=0, pady=0)
 
 b2 = Button(root, text="Save location(button)", width=40)
-b2.grid(row=0, column=1)
+b2.grid(row=0, column=2)
 
 b3 = Button(root, text="Save path(label)", width=40)
-b3.grid(row=0, column=2, padx=10, pady=10)
+b3.grid(row=0, column=3, padx=10, pady=10)
 
 b4 = Button(root, text="Video thumbnail(png)", width=40, height=12)
 b4.grid(row=1, column=0, columnspan=1, rowspan=3)
