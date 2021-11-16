@@ -8,13 +8,12 @@ import urllib.request
 
 # Initializing  urllib library for openning URLs
 opener = urllib.request.build_opener()
-opener.addheaders = [
-    (
-        "User-Agent",
-        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36",
-    )
-]
+opener.addheaders = [(
+    "User-Agent",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36",
+)]
 urllib.request.install_opener(opener)
+
 
 # Functions
 def download_video():
@@ -41,7 +40,8 @@ def fetch_thumbnail():
     print(video_link_entry.get())
     video_link = video_link_entry.get()
     video = YouTube(video_link)
-    urllib.request.urlretrieve(video.thumbnail_url, "video1_thumbnail.png")
+    urllib.request.urlretrieve(video.thumbnail_url,  # nosec
+                               "video1_thumbnail.png")  # nosec
     image = Image.open("video1_thumbnail.png")
     img = image.resize((300, 200))
     my_img = ImageTk.PhotoImage(img)
@@ -64,9 +64,11 @@ text_1 = Label(root, text="Enter Video URL", font=("jost", 15))
 text_1.grid()
 video_link_entry = Entry(root, width=50, borderwidth=1)
 video_link_entry.grid()
-get_thumbnail = Button(
-    root, text="Submit", bg="white", fg="black", command=fetch_thumbnail
-)
+get_thumbnail = Button(root,
+                       text="Submit",
+                       bg="white",
+                       fg="black",
+                       command=fetch_thumbnail)
 get_thumbnail.grid()
 # ~~~
 
@@ -81,7 +83,6 @@ choose_location = Button(
 choose_location.grid()
 # ~~~
 
-
 # Video quality input
 text_3 = Label(root, text="Select quality", font=("jost", 15))
 text_3.grid()
@@ -91,12 +92,13 @@ quality_options_choose.grid()
 # ~~~
 
 # Download button input
-download_button = Button(
-    root, text="Download", bg="red", fg="white", command=download_video
-)
+download_button = Button(root,
+                         text="Download",
+                         bg="red",
+                         fg="white",
+                         command=download_video)
 download_button.grid()
 # ~~~
-
 
 root.mainloop()
 # ~~~~
