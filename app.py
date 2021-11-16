@@ -6,7 +6,6 @@ from pytube import Playlist
 from PIL import ImageTk, Image
 root = Tk()
 folder_name = ""
-
 # function to get the name of save location
 place_holder = Entry(root, text='  ', font=("jost", 15))
 place_holder.grid(row=0, column=0, columnspan=3)

@@ -44,7 +44,6 @@ b7.grid(row=3, column=1,  sticky=SW)
 
 #urllib.request.urlretrieve(video.thumbnail_url, "video1_thumbnail.png")
 
-
 #my_img = ImageTk.PhotoImage(Image.open("video1_thumbnail.png"))
 
 
