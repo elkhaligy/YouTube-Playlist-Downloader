@@ -6,19 +6,24 @@ from pytube import Playlist
 from PIL import ImageTk, Image
 import urllib.request
 
+# Initializing  urllib library for openning URLs
 opener = urllib.request.build_opener()
 opener.addheaders = [
-    ('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+    (
+        "User-Agent",
+        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36",
+    )
+]
 urllib.request.install_opener(opener)
 
-
+# Functions
 def download_video():
     choice = quality_options_choose.get()
     url = video_link_entry.get()
     video = YouTube(url)
-    if(choice == quality_options[0]):
+    if choice == quality_options[0]:
         stream = video.streams.filter(progressive=True).first()
-    elif(choice == quality_options[1]):
+    elif choice == quality_options[1]:
         stream = video.streams.filter(progressive=True).last()
     stream.download(folder_name)
 
@@ -37,7 +42,7 @@ def fetch_thumbnail():
     video_link = video_link_entry.get()
     video = YouTube(video_link)
     urllib.request.urlretrieve(video.thumbnail_url, "video1_thumbnail.png")
-    image = Image.open('video1_thumbnail.png')
+    image = Image.open("video1_thumbnail.png")
     img = image.resize((300, 200))
     my_img = ImageTk.PhotoImage(img)
     my_label = Label(image=my_img)
@@ -48,32 +53,50 @@ def fetch_thumbnail():
 root = Tk()
 root.title("YouTube Video Downloader")
 root.geometry("")
+
+# Global variables
 folder_name = ""
 my_img = ""
+# ~~~
 
-text_1 = Label(root, text='Enter Video URL', font=("jost", 15))
+# Video URL input
+text_1 = Label(root, text="Enter Video URL", font=("jost", 15))
 text_1.grid()
 video_link_entry = Entry(root, width=50, borderwidth=1)
 video_link_entry.grid()
 get_thumbnail = Button(
-    root, text="Submit", bg="white", fg="black", command=fetch_thumbnail)
+    root, text="Submit", bg="white", fg="black", command=fetch_thumbnail
+)
 get_thumbnail.grid()
-# choosing save location
+# ~~~
 
-
+# Save location input
 choose_location = Button(
-    root, text="Choose save location", bg="white", fg="black", command=open_save_location)
+    root,
+    text="Choose save location",
+    bg="white",
+    fg="black",
+    command=open_save_location,
+)
 choose_location.grid()
+# ~~~
 
-# choosing video quality
-text_3 = Label(root, text='Select quality', font=("jost", 15))
+
+# Video quality input
+text_3 = Label(root, text="Select quality", font=("jost", 15))
 text_3.grid()
 quality_options = ["720p", "144p"]
 quality_options_choose = ttk.Combobox(root, values=quality_options)
 quality_options_choose.grid()
+# ~~~
 
-
-download_button = Button(root, text="Download",
-                         bg="red", fg="white", command=download_video)
+# Download button input
+download_button = Button(
+    root, text="Download", bg="red", fg="white", command=download_video
+)
 download_button.grid()
+# ~~~
+
+
 root.mainloop()
+# ~~~~
