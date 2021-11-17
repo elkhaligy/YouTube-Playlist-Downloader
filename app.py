@@ -91,8 +91,14 @@ def fetch_info():
 
         vid_views = video.views
         views_label = Label(
-            root, text=f"Video title: {vid_views}")
+            root, text=f"Video views: {vid_views}")
         views_label.pack()
+        
+        stream = video.streams.get_highest_resolution()
+        vid_size = stream.filesize
+        vid_size_label = Label(
+            root, text=f"Video size: {vid_size/(1024*1024)} MB")
+        vid_size_label.pack()
         # print(video.streams)
 
 
