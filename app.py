@@ -34,23 +34,30 @@ def download_video():
     choice = quality_options_choose.get()
     url = video_link_entry.get()
     video = YouTube(url, on_progress_callback=on_progress)
+    
     if choice == quality_options[0]:
         #stream = video.streams.filter(progressive=True).first()
         stream = video.streams.get_highest_resolution()
     elif choice == quality_options[1]:
         stream = video.streams.filter(progressive=True).last()
-    stream.download(folder_name)
+    if stream is None:
+        return
+    else:
+        stream.download(folder_name)
 
 
 def on_progress(chunk: bytes, file_handler, bytes_remaining: int):
     global progress
-    bytes_downloaded = stream.filesize-bytes_remaining
-    print(stream.filesize)
-    print(stream.filesize-bytes_remaining)
-    progress = (bytes_downloaded/stream.filesize)*100
-    print(progress)
-    my_label = Label(root, text=f"progress {progress}%")
-    my_label.pack()
+    if(stream is None):
+        return
+    else:
+        bytes_downloaded = stream.filesize-bytes_remaining
+        print(stream.filesize)
+        print(stream.filesize-bytes_remaining)
+        progress = (bytes_downloaded/stream.filesize)*100
+        print(progress)
+        my_label = Label(root, text=f"progress {progress}%")
+        my_label.pack()
 
 
 def open_save_location():
