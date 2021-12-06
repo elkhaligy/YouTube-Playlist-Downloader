@@ -42,33 +42,34 @@ my_canvas.create_window((0, 0), window=second_frame, anchor="nw")
 # End Scrollbar
 
 
-
-
-
-def fetch_info():
+def draw():
+    """ 
+        This function is called by the "Submit Link" Button
+        It draws each video information on the playlist like video title, size, qualities and checkboxes
+        After the video information are drawn, it starts to draw the download button
+    """
+    # Initialize variables and objects
     playlist_link = video_link_entry.get()
     playlist = Playlist(playlist_link)
-    i = 1
+
     global var
-    k = 0
     global services
+    i = 1
+    k = 0
     services = []
+    # Start drawing each video information by iterating through the playlist
     for video in playlist.videos:
         Label(second_frame, text=f"Video {i}").grid()
-
-        # urllib.request.urlretrieve(  # nosec
-        #     video.thumbnail_url, "video1_thumbnail.png")  # nosec
-        # image = Image.open("video1_thumbnail.png")
-        # img = image.resize((50, 50))
-        # my_img = ImageTk.PhotoImage(img)
-        # my_label_img = Label(second_frame, image=my_img)
-        # my_label_img.grid()
-        
         Label(second_frame, text=f"Title: {video.title[0:50]}").grid()
+
+        # Video quality and size
         fetch_quality_info(video.embed_url)
         Label(second_frame, text=" ".join(str(x)
               for x in available_res)).grid()
-        Label(second_frame, text=" ".join(str(x) for x in sizes)).grid()
+        Label(second_frame, text=" ".join(str(x)
+              for x in sizes)).grid()
+        # Video quality checkbox for downloading later
+
         for res in available_res:
             option = IntVar()
             option.set(0)
@@ -79,17 +80,23 @@ def fetch_info():
         Label(second_frame, text="-"*60).grid()
         i += 1
 
+    # The download button
     download_button2 = Button(
         second_frame,
         text="Download Checked Videos",
         bg="red",
         fg="white", command=lambda: threading.Thread(target=download_video).start())
     download_button2.grid(row=1, column=2)
+
+    # Checkbox selection submission
     Button(second_frame, text="Submit Selections",
            command=show).grid(row=2, column=2)
 
 
 def show():
+    """ 
+        This function makes a global list of the selections of videos which will be later used to download
+    """
     global selected
     global ls
     ls = []
@@ -102,14 +109,21 @@ def show():
 
 
 def download_video():
+    """
+        Here we download each video by iterating through the playlist
+    """
     url = video_link_entry.get()
     playlist = Playlist(url)
     global stream_lst
     stream_lst = []
     urls = []
+
+    # Making urls list
     for video in playlist.videos:
         urls.append(video.embed_url)
     j = 0
+
+    # Making stream list
     for video in playlist.videos:
         for i in available_res:
             v = YouTube(urls[j], on_progress_callback=on_progress)
@@ -117,12 +131,17 @@ def download_video():
                 progressive=True).get_by_resolution(i)
             stream_lst.append(stream)
         j += 1
-    print(stream_lst)
+    # print(stream_lst)
+
+    # Downloading each stream individually
     for i in ls:
         stream_lst[int(i)].download(folder_name)
 
 
 def on_progress(chunk: bytes, file_handler, bytes_remaining: int):
+    """
+        This function is responsible for the progress meter for each video being downloaded
+    """
     global my_label
     count = 1
     for i in stream_lst:
@@ -133,24 +152,27 @@ def on_progress(chunk: bytes, file_handler, bytes_remaining: int):
         progress.set(f"progress {count}: "+str(round(progress2))+"%")
         #my_label = Label(second_frame, text=f"progress {progress}%")
         # my_label.grid()
-        second_frame.update_idletasks()
         count += 1
+        second_frame.update_idletasks()
         break
 
 
-
-
 def open_save_location():
-    """This function opens a folder browser to choose where to save your video or playlist"""
+    """
+        This function opens a folder browser to choose where to save your video or playlist
+    """
     global folder_name
     folder_name = filedialog.askdirectory()
     folder_name_print = Label(second_frame, text="Save to "+folder_name)
     folder_name_print.grid(row=3, column=0)
 
 
-
-
 def fetch_quality_info(video_link):
+    """
+        This function takes argument video link and make two global lists
+        available_res: a list of all available resolutions for this specific video link
+        sizes: a list of the corresponding sizes of each available resolution
+    """
     global sizes
     global available_res
     video = YouTube(video_link)
@@ -185,7 +207,7 @@ video_link_entry = Entry(second_frame, width=50, borderwidth=1)
 video_link_entry.grid(row=1, column=0, padx=10, pady=10)
 
 submit_url_button = Button(second_frame, text="Submit Link", bg="white",
-                           fg="black", command=lambda: threading.Thread(target=fetch_info).start())
+                           fg="black", command=lambda: threading.Thread(target=draw).start())
 submit_url_button.grid(row=1, column=1)
 
 progress = StringVar()
