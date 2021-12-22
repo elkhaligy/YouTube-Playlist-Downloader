@@ -39,54 +39,103 @@ def draw():
         It draws each video information on the playlist like video title, size, qualities and checkboxes
         After the video information are drawn, it starts to draw the download button
     """
-    # Initialize variables and objects
-    playlist_link = video_link_entry.get()
-    playlist = Playlist(playlist_link)
-
     global var
     global services
-    i = 1
-    k = 0
-    services = []
-    # Start drawing each video information by iterating through the playlist
-    rows = 2
-    coselected_boxes = 0
-    for video in playlist.videos:
-        Label(frame, text=f"Video {i}").grid(row=rows, column=coselected_boxes)
-        rows += 1
-        Label(frame, text=f"Title: {video.title[0:50]}").grid(
-            row=rows, column=coselected_boxes)
-        rows += 1
-        # Video quality and size
-        get_quality_sizes(video.embed_url)
-        Label(frame, text=" ".join(str(x)
-              for x in available_res)).grid(row=rows, column=coselected_boxes)
-        rows += 1
-        Label(frame, text=" ".join(str(x)
-              for x in sizes)).grid(row=rows, column=coselected_boxes)
-        rows += 1
-        # Video quality checkbox for downloading later
+    # Initialize variables and objects
+    playlist_link = video_link_entry.get()
+    try:
+        playlist = Playlist(playlist_link)
 
-        for res in available_res:
-            option = IntVar()
-            option.set(0)
-            services.append(option)
-            Checkbutton(frame, text=f"Download {res}",
-                        variable=services[k]).grid(row=rows, column=coselected_boxes)
+        i = 1
+        k = 0
+        services = []
+        # Start drawing each video information by iterating through the playlist
+        rows = 2
+        coselected_boxes = 0
+        for video in playlist.videos:
+            Label(frame, text=f"Video {i}").grid(
+                row=rows, column=coselected_boxes)
             rows += 1
-            k += 1
-        Label(frame, text="-"*60).grid(row=rows, column=coselected_boxes)
-        rows += 1
-        i += 1
+            Label(frame, text=f"Title: {video.title[0:50]}").grid(
+                row=rows, column=coselected_boxes)
+            rows += 1
+            # Video quality and size
+            get_quality_sizes(video.embed_url)
+            Label(frame, text=" ".join(str(x)
+                                       for x in available_res)).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            Label(frame, text=" ".join(str(x)
+                                       for x in sizes)).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            # Video quality checkbox for downloading later
 
-    # The download button
-    download_button2 = Button(
-        frame,
-        text="Download Checked",
-        bg="red",
-        fg="white", command=lambda: threading.Thread(target=start_download).start(),
-        width=18, border=0.5, pady=0, padx=0, font=("Aerial", 9))
-    download_button2.grid(row=3, column=1)
+            for res in available_res:
+                option = IntVar()
+                option.set(0)
+                services.append(option)
+                Checkbutton(frame, text=f"Download {res}",
+                            variable=services[k]).grid(row=rows, column=coselected_boxes)
+                rows += 1
+                k += 1
+            Label(frame, text="-"*60).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            i += 1
+
+        # The download button
+        download_button2 = Button(
+            frame,
+            text="Download Checked",
+            bg="red",
+            fg="white", command=lambda: threading.Thread(target=start_download).start(),
+            width=18, border=0.5, pady=0, padx=0, font=("Aerial", 9))
+        download_button2.grid(row=3, column=1)
+    except:
+        try:
+            video = YouTube(playlist_link)
+            i = 1
+            k = 0
+            services = []
+            # Start drawing each video information by iterating through the playlist
+            rows = 2
+            coselected_boxes = 0
+            Label(frame, text=f"Video {i}").grid(
+                row=rows, column=coselected_boxes)
+            rows += 1
+            Label(frame, text=f"Title: {video.title[0:50]}").grid(
+                row=rows, column=coselected_boxes)
+            rows += 1
+            # Video quality and size
+            get_quality_sizes(video.embed_url)
+            Label(frame, text=" ".join(str(x)
+                                        for x in available_res)).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            Label(frame, text=" ".join(str(x)
+                                        for x in sizes)).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            # Video quality checkbox for downloading later
+
+            for res in available_res:
+                option = IntVar()
+                option.set(0)
+                services.append(option)
+                Checkbutton(frame, text=f"Download {res}",
+                            variable=services[k]).grid(row=rows, column=coselected_boxes)
+                rows += 1
+                k += 1
+            Label(frame, text="-"*60).grid(row=rows, column=coselected_boxes)
+            rows += 1
+            i += 1
+
+            # The download button
+            download_button2 = Button(
+                frame,
+                text="Download Checked",
+                bg="red",
+                fg="white", command=lambda: threading.Thread(target=start_download).start(),
+                width=18, border=0.5, pady=0, padx=0, font=("Aerial", 9))
+            download_button2.grid(row=3, column=1)
+        except:
+            print("Something went wrong")
 
 
 def get_selected_boxes():
