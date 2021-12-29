@@ -3,7 +3,7 @@
 import threading
 # GUI Imports
 import tkinter as tk
-from tkinter import Label, Entry, Button, StringVar, filedialog, IntVar, Checkbutton
+from tkinter import Label, Entry, Button, StringVar, filedialog, IntVar, Checkbutton, messagebox
 from tkinter.messagebox import NO
 from tkscrolledframe import ScrolledFrame
 # Pytube Imports
@@ -163,6 +163,7 @@ def draw():
                                      font=("Aerial", 9))
             download_button.grid(row=3, column=1)
         except:
+            messagebox.showerror('Error', 'Please enter a valid url!')
             print("Something went wrong")
 
 
@@ -176,7 +177,7 @@ def get_selected_boxes():
     for i in range(len(services)):
         #selected = ""
         if services[i].get() >= 1:
-            print(services[i].get())
+            # print(services[i].get())
             #selected += str(i)
             selected_boxes.append(str(i))
             # print(selected)
@@ -186,7 +187,7 @@ def get_selected_boxes():
 def start_download():
     get_selected_boxes()
     k = 1
-    print(stream_list)
+    # print(stream_list)
     for i in selected_boxes:
         # print(i)
         progress.set(f"Downloading Video {k}")
@@ -194,7 +195,7 @@ def start_download():
         stream_list[int(i)].download(folder_name)
         progress.set(f"Done Downloading")
         k += 1
-
+        messagebox.showinfo('News', 'Videos are downloaded successfully!')
 
 def download_all():
     k = 1
@@ -207,9 +208,10 @@ def download_all():
             progressive=True).get_highest_resolution()
         if stream != None:
             stream.download(folder_name)
-        #stream_list[int(i)].download(folder_name)
+        # stream_list[int(i)].download(folder_name)
         progress.set(f"Done Downloading")
         k += 1
+    messagebox.showinfo('News', 'Playlist is downloaded successfully!')
 
 
 def open_save_location():
